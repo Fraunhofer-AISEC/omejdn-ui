@@ -16,9 +16,6 @@ jobs:
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     steps:
     - uses: actions/checkout@master
-    - uses: actions/download-artifact@v2
-      with:
-        name: SBOM
     - name: Build docker image
       run: |
         git_hash=$(git rev-parse --short "$GITHUB_SHA")
