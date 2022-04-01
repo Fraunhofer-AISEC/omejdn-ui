@@ -1,5 +1,7 @@
 # Omejdn Admin UI
 
+Welcome to Omejdn!
+
 This is the official Web-GUI for the [Omejdn OAuth 2.0 Authorization Server](https://github.com/Fraunhofer-AISEC/omejdn-server).
 
 ## How to run
