@@ -1,0 +1,61 @@
+<div *ngIf="config">
+
+  <!--Main Configuration Options-->
+  <div class="card m-2">
+    <div class="card-header">OAuth Server Settings</div>
+    <div class="card-body">
+      <!--Main settings-->
+      <app-inputfield type="string" name="{{ configNames[setting] || setting}}" [(value)]="config[setting]"
+          *ngFor="let setting of ['issuer','front_url','bind_to','environment','accept_audience','default_audience','user_backend_default']"></app-inputfield>
+  
+      <!--OpenID functionality-->
+      <app-inputfield type="boolean" name="{{ configNames['openid'] || 'openid'}}" [(value)]="config['openid']"></app-inputfield>
+    </div>
+  </div>
+
+  <!--Tokens-->
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+    <div class="col" *ngFor="let token_type of ['access_token','id_token']">
+      <div class="card m-2">
+        <div class="card-header mx-n3">{{ configNames[token_type] }}</div>
+        <div class="card-body">
+          <app-inputfield type="number" name="{{ configNames['expiration'] || 'expiration'}}" [(value)]="config[token_type]['expiration']"></app-inputfield>
+          <app-inputfield type="string" name="{{ configNames['algorithm'] || 'algorithm'}}" [(value)]="config[token_type]['algorithm']"></app-inputfield>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Plugins-->
+  <div class="card m-2">
+    <div class="card-header">Plugins</div>
+    <div class="card-body row">
+      <div class="col-lg-3 col-sm-12">
+        <div class="btn-group-vertical btn-group-toggle" role="group" style="display: flex" name="radioBasic">
+          <h4 *ngIf="getPlugins('api').length > 0">APIs</h4>
+          <label class="btn btn-primary" *ngFor="let plugin of getPlugins('api')">
+            <input type="radio" [formControl]="showPlugin" value="api.{{ plugin }}" class="btn-check"> {{ plugin }}
+          </label>
+          <h4 *ngIf="getPlugins('user_db').length > 0">User Backends</h4>
+          <label class="btn btn-primary" *ngFor="let plugin of getPlugins('user_db')">
+            <input type="radio" [formControl]="showPlugin" value="user_db.{{ plugin }}" class="btn-check"> {{ plugin }}
+          </label>
+          <h4 *ngIf="getPlugins('claim_mapper').length > 0">Claim Mappers</h4>
+          <label class="btn btn-primary" *ngFor="let plugin of getPlugins('claim_mapper')">
+            <input type="radio" [formControl]="showPlugin" value="claim_mapper.{{ plugin }}" class="btn-check"> {{ plugin }}
+          </label>
+        </div>
+      </div>
+      <div class="col-lg-9 col-sm-12" *ngFor="let plugin of getPlugin()">
+        <app-inputfield name="{{ setting}}" [(value)]="plugin[setting]" *ngFor="let setting of getConfigSettings(plugin)"></app-inputfield>
+      </div>
+    </div>
+  </div>
+
+  <div class="clearfix m-2">
+    <button type="submit" class="btn btn-primary btn-save-and-cancel float-left me-5" (click)="saveChanges()">Save</button>
+    <a href="./#" class="btn btn-primary btn-save-and-cancel float-left">Cancel</a>
+  </div>
+  <br />
+
+</div>

@@ -1,0 +1,100 @@
+<!--Search/New Bar-->
+<form class="form-inline" style="display: table; margin: auto;">
+  <div class="input-group" *ngIf = "!showNewUser">
+    <input class="form-control" type="search" [(ngModel)]="searchTerm" name="searchTerm"
+      placeholder="Search users">
+    <button class="btn btn-primary"  (click)="showNewUser = true">
+      <i class="fa fa-plus-square text-primary"></i>
+      Add User
+    </button>
+  </div>
+  <div class="input-group" *ngIf = "showNewUser">
+    <span class="input-group-text">Please enter a new Username</span>
+    <input class="form-control" type="text" #newUsername>
+    <button class="btn btn-primary" type="button" (click)="addUser(newUsername.value)">
+      <span class="fa fa-plus-square text-primary"></span> Add User
+    </button>
+    <button class="btn btn-primary" (click)="showNewUser = false">
+      <span class="fa fa-close"></span> Back
+    </button>
+  </div>
+</form>
+<br />
+
+<!--Empty Search result-->
+<div *ngIf="(users | search: searchTerm).length == 0" style="text-align: center;"
+  class="alert alert-secondary alert-dismissible fade show" role="alert">No users to show</div>
+
+<!--Userlist-->
+<div class="row row-cols-1 row-cols-md-3 g-4" *ngIf="users">
+  <div class="col" *ngFor="let user of users | search: searchTerm">
+    <div class="card m-2 h-100" [routerLink]="['/user', user.username]">
+      <div class="card-header text-truncate fs-4">
+        <!--<div *ngIf="getAttribute(user,'picture')!=null" class="me-1 mt-1 d-inline-block border rounded-circle"
+          style="height: 64px; width: 64px; background-size: cover"
+          [ngStyle]="{'background-image':'url('+getAttribute(user,'picture')+')'}">
+        </div>
+        <div *ngIf="getAttribute(user,'picture')==null" class="me-1 mt-1 d-inline-block border rounded-circle"
+          style="height: 64px; width: 64px; background-size: cover">
+          <i class="fa fa-user-circle fa-2x text-secondary"></i>
+        </div> TODO: Add profile pictures-->
+        <i class="fa fa-user-circle text-secondary"></i>
+        <span class="mx-1">
+          {{ getAttribute(user, 'preferred_username') || user.username}}
+        </span>
+      </div>
+
+      <!--Attributes-->
+      <div class="card-body" >
+        <!--No Attributes Alert-->
+        <div class="alert alert-info fade show" *ngIf="!hasAttributes(user)">
+          This user has no attributes. Maybe try <a class="buttonlink"
+            [routerLink]="['/user/', user.username]">adding some?</a>
+        </div>
+        <h6 class="card-sbutitle" *ngIf="hasAttributes(user)">
+          <strong>Attributes:</strong>
+        </h6>
+        <table class="table table-sm">
+          <tbody>
+            <tr *ngFor="let attribute of getUserAttributes(user)">
+              <td class="table-content">{{attribute.key}}</td>
+              <td class="table-content"> <div>{{attribute.value}}</div></td>
+            </tr>
+            <tr *ngIf="(openUser != user) && hasLotsOfAttributes(user)" class="ml-4">
+              <div>
+                <i>... and {{user.attributes.length -3}} more attributes</i><br/>
+              </div>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card-footer">
+        <!--Confirm Delete-->
+        <div class="alert alert-danger fade show" *ngIf="confirmUser == user.username">
+          Do you really want to delete this user?
+        </div>
+        <button class="btn btn-primary float-end m-1" (click)="deleteUser(user); $event.stopPropagation()" *ngIf="confirmUser == user.username">
+          <span class="fa fa-trash"></span> Delete
+        </button>
+        <button class="btn btn-primary float-end m-1" (click)="hideConfirmDelete(); $event.stopPropagation()" *ngIf="confirmUser == user.username">
+          <span class="fa fa-close"></span> Cancel
+        </button>
+        <button class="btn btn-primary float-end m-1" *ngIf="user.username!= confirmUser"
+          (click)="confirmDelete(user); $event.stopPropagation()">
+          <span class="fa fa-trash"></span> Delete
+        </button>
+        <button class="btn btn-primary float-end m-1" *ngIf="user.username!= confirmUser"
+          [routerLink]="['/user/', user.username]">
+          <span class="fa fa-edit"></span> Edit
+        </button>
+        <button class="btn btn-primary float-end m-1" (click)="openUser = user; $event.stopPropagation()" *ngIf="user.username!= confirmUser && (openUser != user) && hasLotsOfAttributes(user)">
+          <i class="fa fa-expand"></i> Show all
+        </button>
+        <button class="btn btn-primary float-end m-1" (click)="openUser = undefined; $event.stopPropagation()" *ngIf="user.username!= confirmUser && (openUser == user) && hasLotsOfAttributes(user)">
+          <i class="fa fa-expand"></i> Show less
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

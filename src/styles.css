@@ -1,0 +1,133 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "../node_modules/font-awesome/css/font-awesome.css";
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.btn.btn-primary {
+  background-image: none;
+  background-color: #fff;
+  color: #555;
+  border: 1px solid #ddd;
+}
+
+.btn.btn-primary:hover {
+  background-color: #555;
+  border: 1px solid #555;
+  color: #fff;
+  background-image:none;
+  box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.5);
+}
+  
+.btn.btn-primary.disabled {
+  background-color: #ddd;
+  box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.5);
+  border: 1px solid #ddd;
+  color: #555;
+}
+  
+  .btn-primary:disabled:hover {
+    color: #ccc;
+    background-color: white;
+  }
+
+  .btn.btn-secondary {
+      background-color: #ddd;
+      color: black;
+      border: 0px; 
+  }
+
+  .badge.badge-primary {
+      background-color: #ddd;
+      color: black;
+      border: 1px solid #555;
+      font-weight: normal;
+  }
+
+  .btn.btn-outline-primary{
+      background-color: transparent;
+      color: #555;
+      border-color: #555;
+  }
+
+  .btn.btn-outline-primary:hover{
+    background-color: #555;
+    color:white;
+    border-color: #555;
+}
+
+.badge.badge-id {
+  background-color: transparent;
+  font-weight: normal;
+}
+
+.badge.badge-fixdetail-left {
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  border-top-right-radius: 0rem;
+  border-bottom-right-radius: 0rem;
+}
+
+.badge.badge-fixdetail-right {
+  background-color: #f2f5f8;
+  border: 1px solid #ced4da;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  border-top-left-radius: 0rem;
+  border-bottom-left-radius: 0rem;
+}
+
+.btn.btn-delete-complex-attribute {
+  background-color: white;
+  color: #6c757d;
+  border-color: #6c757d;
+  box-sizing: border-box;
+  border-radius: calc(-1px + 0.25rem);
+}
+
+.search-wrapper {
+  display:inline-block;
+  position: relative
+}
+
+.search-wrapper:after {
+  font-family: 'FontAwesome';
+  content: '\f002';
+  position: absolute;
+  color: #555;
+  right: 1.25em;
+  top: 0.5em;
+}
+
+.card.card-new:hover {
+  background-color: #f2f5f8;
+  cursor: pointer;
+}
+
+.card.card-list:hover {
+  background-color: #f2f5f8;
+  cursor: pointer;
+}
+
+.card-avatar-character {
+  padding-left: 0.5em;
+}
+
+div.card-avatar-character {
+  font-size: 2em;
+}
+
+.card-element{
+  padding-left: 15px; 
+  padding-right: 15px;
+}

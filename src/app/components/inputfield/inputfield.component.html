@@ -1,0 +1,56 @@
+<!--Primitive values-->
+<div class="input-group my-2" *ngIf="!getType().startsWith('array') && !getType().startsWith('attribute')">
+  <!--Name-->
+  <span class="input-group-text" *ngIf="name">{{ name }}</span>
+
+  <!--Input-->
+  <input class="form-control" [(ngModel)]="value" (ngModelChange)="valueChange.emit($event)" type="text"     [disabled]="static" *ngIf="getType() == 'string'">
+  <input class="form-control" [(ngModel)]="value" (ngModelChange)="valueChange.emit($event)" type="number"   [disabled]="static" *ngIf="getType() == 'number'">
+  <div class="input-group-text" *ngIf="getType() == 'boolean'">
+    <input class="form-check-input mt-0" [(ngModel)]="value" (ngModelChange)="valueChange.emit($event)" type="checkbox" [disabled]="static">
+  </div>
+  <select [(ngModel)]="value" (ngModelChange)="valueChange.emit($event)" class="form-control" [disabled]="static" *ngIf="getType() == 'enum'">
+    <option *ngFor="let val of options" [value]="val">{{val}}</option>
+  </select>
+  <select multiple class="form-control" [(ngModel)]="value" (ngModelChange)="valueChange.emit($event)" [size]="options.length"  [disabled]="static" *ngIf="getType() == 'enum-multi'">
+    <option *ngFor="let val of options" [value]="val">{{val}}</option>
+  </select>
+
+  <!--Add/delete-->
+  <button class="btn btn-outline-secondary" type="button" (click)="deleteCallback(refID)" *ngIf="deleteCallback != null">
+    <span class="fa fa-trash"></span>
+  </button>
+  <button class="btn btn-outline-secondary" type="button" (click)="addCallback(value,getType()); value =''" *ngIf="addCallback != null">
+    <span class="fa fa-plus"></span>
+  </button>
+</div>
+
+<!--Arrays-->
+<div class="card my-2" *ngIf="getType().startsWith('array')">
+  <div class="card-header">
+    {{ name }}
+    <button class="btn btn-delete-complex-attribute float-end" type="button" (click)="deleteCallback(refID)" *ngIf="deleteCallback != null"><span class="fa fa-trash"></span></button>
+  </div>
+  <div class="card-body">
+    <div *ngFor="let item of value; let i=index" class="card-element">
+      <app-inputfield [type]="elemType(getType())" [name]="i+1" [(value)]="value[i]" [deleteCallback]="delete" [refID]="i" [static]="true"></app-inputfield>
+    </div>
+  </div>
+  <div class="card-footer">
+    <app-inputfield [type]="elemType(getType())" [addCallback]="add"></app-inputfield>
+  </div>
+</div>
+
+
+<!--Attributes-->
+<app-inputfield [name]="value['key']" [(value)]="value['value']" [deleteCallback]="deleteCallback" [refID]="refID"
+    *ngIf="getType().startsWith('attribute') && addCallback == null"></app-inputfield>
+<div class="input-group my-2" *ngIf="getType().startsWith('attribute') && addCallback != null">
+  <input class="form-control" [(ngModel)]="value" (ngModelChange)="valueChange.emit($event)" type="text"     [disabled]="static">
+  <select #newType class="form-control">
+    <option *ngFor="let type of [['Text','string'],['Multivalued','array-any'],['Truth value','boolean'],['Number','number']]" value="{{ type[1] }}">
+      {{ type[0] }}
+    </option>
+  </select>
+  <button class="btn btn-outline-secondary" type="button" (click)="addCallback(value,newType.value); value =''"><span class="fa fa-plus"></span></button>
+</div>

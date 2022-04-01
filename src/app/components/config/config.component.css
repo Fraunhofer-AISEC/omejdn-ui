@@ -1,0 +1,31 @@
+.input-group>.input-group-prepend {
+    flex: 0 0 20%;
+}
+
+.input-group>.input-group-prepend>.input-group-text {
+    width: 100%;
+}
+
+.table-userBackend{
+    width: 100%
+}
+
+.btn.btn-primary.btn-userBackend {
+    border: 0rem;
+}
+
+.btn.btn-primary.btn-userBackend:hover {
+    background-color: white;
+    color: #555;
+}
+
+.btn.btn-primary.btn-userBackend:disabled {
+    color: #ddd;
+    background-color: white;
+}
+
+.badge.badge-primary.badge-add{
+    font-size: 1rem;
+    padding: 0.375rem 0.75rem;
+    line-height: 1.5;
+}

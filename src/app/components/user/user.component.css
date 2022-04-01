@@ -1,0 +1,11 @@
+.table-content{
+    white-space: nowrap;
+    width: 100%;                   /* IE6 needs any width */
+    overflow: hidden;              /* "overflow" value must be different from  visible"*/ 
+    text-overflow:    ellipsis;
+}
+
+table {
+    table-layout: fixed;
+    width: 100%;
+}

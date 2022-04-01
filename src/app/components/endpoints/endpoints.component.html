@@ -1,0 +1,38 @@
+<p>Version: 1</p>
+<br/>
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <th>OpenID Issuer</th>
+            <td>{{settings.get().oidcIssuer}}</td>
+        </tr>
+        <tr>
+            <th>Client</th>
+            <td>{{settings.get().apiUrl}}/config/clients</td>
+        </tr>
+        <tr>
+            <th>Client certificate</th>
+            <td>{{settings.get().apiUrl}}/config/clients/keys/:client_id</td>
+        </tr>
+        <tr>
+            <th>User</th>
+            <td>{{settings.get().apiUrl}}/config/users</td>
+        </tr>
+        <tr>
+            <th>Config</th>
+            <td>{{settings.get().apiUrl}}/config/omejdn</td>
+        </tr>
+        <tr>
+            <th>Authorization</th>
+            <td>{{app.oauthService.loginUrl}}</td>
+        </tr>
+        <tr>
+            <th>Token</th>
+            <td>{{app.oauthService.tokenEndpoint}}</td>
+        </tr>
+        <tr>
+            <th>Userinfo</th>
+            <td>{{app.oauthService.userinfoEndpoint}}</td>
+        </tr>
+    </tbody>
+</table>

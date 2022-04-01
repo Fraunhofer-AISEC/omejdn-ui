@@ -1,0 +1,40 @@
+<div *ngIf="webfingerConfig">
+    <div class="card mb-2" *ngFor="let mail of getMailKeys()">
+        <div class="card-header">
+            {{mail}}
+            <button class="btn btn-delete-complex-attribute float-end" (click)="deleteEntry(mail)">
+                <span class="fa fa-trash"></span>
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="input-group" *ngFor="let detail of getDetailKeys(mail)">
+                <span class="input-group-text" id="client_id">{{detail}}</span>
+                <input type="text" class="form-control" placeholder="value" name="detail-value"
+                    [(ngModel)]="webfingerConfig[mail][detail]">
+                <button class="btn btn-outline-secondary" type="button" (click)="deleteDetail(mail, detail)">
+                    <span class="fa fa-trash"></span>
+                </button>
+            </div>
+            <div class="input-group mt-2">
+                <span class="input-group-text" id="client_id">Add detail</span>
+                <input type="text" class="form-control" placeholder="value" name="detail-value" [(ngModel)]="newDetail[mail]">
+                <button class="btn btn-outline-secondary" type="button" (click)="addDetail(mail)">
+                    <span class="fa fa-plus"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card mb-2">
+    <div class="card-header">
+        <i>New Entry</i>
+    </div>
+    <div class="card-body">
+        <app-inputfield name="E-Mail address or domain" type="string" [addCallback]="addEntry"></app-inputfield>
+    </div>
+</div>
+
+<div class="clearfix mt-5">
+    <button type="submit" class="btn btn-primary btn-save-and-cancel float-left me-5" (click)="saveChanges()">Save</button>
+    <a href="./#" class="btn btn-primary btn-save-and-cancel float-left">Cancel</a>
+</div>

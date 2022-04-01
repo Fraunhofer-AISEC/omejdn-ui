@@ -1,0 +1,84 @@
+<!--Search/New Bar-->
+<form class="form-inline" style="display: table; margin: auto;">
+  <div class="input-group" *ngIf = "!showNewClient">
+    <input class="form-control" type="search" [(ngModel)]="searchTerm" name="searchTerm"
+      placeholder="Search clients">
+    <button class="btn btn-primary"  (click)="showNewClient = true">
+      <i class="fa fa-plus-square text-primary"></i>
+      Add Client
+    </button>
+  </div>
+  <div class="input-group" *ngIf = "showNewClient">
+    <span class="input-group-text">Please enter a new Client ID</span>
+    <input class="form-control" type="text" #newClientId>
+    <button class="btn btn-primary" type="button" (click)="addClient(newClientId.value)">
+      <span class="fa fa-plus-square text-primary"></span> Add Client
+    </button>
+    <button class="btn btn-primary" (click)="showNewClient = false">
+      <span class="fa fa-close"></span> Back
+    </button>
+  </div>
+</form>
+<br />
+
+<!--Empty Search result-->
+<div *ngIf="(clients | search: searchTerm).length == 0" style="text-align: center;"
+  class="alert alert-secondary alert-dismissible fade show" role="alert">No clients to show</div>
+
+<!--Clientlist-->
+<div class="row row-cols-1 row-cols-md-3 g-4" *ngIf="clients">
+  <div class="col" *ngFor="let client of clients | search: searchTerm">
+    <div class="card m-2 h-100" [routerLink]="['/client', client.client_id]">
+
+      <div class="card-header text-truncate fs-4">
+        <i class="fa fa-lock text-secondary" *ngIf="client.token_endpoint_auth_method != 'none'" title="Confidential Client"></i>
+        <i class="fa fa-globe text-secondary" *ngIf="client.token_endpoint_auth_method == 'none'" title="Public Client"></i>
+        <span class="mx-1">
+          {{client.client_name || client.client_id}}
+        </span>
+      </div>
+      <div class="card-body">
+        <!--No Scopes Alert-->
+        <div class="alert alert-info fade show" *ngIf="!hasScopes(client)">
+          This client has no scopes. Maybe try <a class="buttonlink"
+            [routerLink]="['/client', client.client_id]">adding some?</a>
+        </div>
+
+        <!--Scopes-->
+        <h6 class="card-sbutitle" *ngIf="hasScopes(client)">
+          <strong>Allowed Scopes:</strong>
+        </h6>
+        <div class="table pb-1" *ngIf="hasScopes(client)">
+          <div class="container">
+            <div class="row mb-1">
+              <div class = "col-sm mb-4" *ngFor="let scope of client.scope" style="word-break: keep-all">
+                {{scope}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <img *ngIf="client.logo_uri != null" src="{{client.logo_uri}}" class="card-img-bottom mx-auto">
+      </div>
+      <div class="card-footer">
+        <!--Confirm Delete-->
+        <div class="alert alert-danger" *ngIf="confirmClient == client.client_id">
+          Do you really want to delete this client?
+        </div>
+        <button class="btn btn-primary float-end m-1" (click)="deleteClient(client); $event.stopPropagation()" *ngIf="confirmClient == client.client_id">
+          <span class="fa fa-trash"></span> Delete
+        </button>
+        <button class="btn btn-primary float-end m-1" (click)="hideConfirmDelete(); $event.stopPropagation()" *ngIf="confirmClient == client.client_id">
+          <span class="fa fa-close"></span> Cancel
+        </button>
+        <button class="btn btn-primary float-end m-1" *ngIf="client.client_id != confirmClient"
+          (click)="confirmDelete(client); $event.stopPropagation()">
+          <span class="fa fa-trash"></span> Delete
+        </button>
+        <button class="btn btn-primary float-end m-1" *ngIf="client.client_id != confirmClient"
+          [routerLink]="['/client/', client.client_id]">
+          <span class="fa fa-edit"></span> Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

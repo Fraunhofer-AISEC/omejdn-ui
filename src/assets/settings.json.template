@@ -1,0 +1,5 @@
+{
+  "apiUrl": "==API_URL==",
+  "oidcIssuer": "==OIDC_ISSUER==",
+  "clientId": "==CLIENT_ID=="
+}

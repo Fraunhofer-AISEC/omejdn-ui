@@ -1,0 +1,21 @@
+.form-control:disabled{
+    background-color: #f2f5f8;
+}
+
+.input-group>.input-group-prepend {
+    flex: 0 0 10%;
+}
+
+.input-group>.input-group-prepend>.input-group-text {
+    width: 100%;
+}
+
+.form-control.mapping-key:disabled{
+    color: #495057;
+    background-color: #fff;
+}
+
+.form-control.mapping-key::placeholder{
+    color: #495057;
+    background-color: #fff;
+}

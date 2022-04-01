@@ -1,0 +1,135 @@
+<div *ngIf="user">
+
+  <!--username-->
+  <app-inputfield type="string" name="Username" [value]="user['username']" [static]="true"></app-inputfield>
+  
+  <!--Status-->
+  <app-inputfield type="string" name="Status" [value]="isExtern() ? 'extern: '+user.extern : 'intern'" [static]="true"></app-inputfield>
+
+  <!--Attributes-->
+  <div *ngIf="!isExtern()">
+    <app-inputfield type="array-attribute" name="Attributes" [(value)]="user['attributes']"></app-inputfield>
+  </div>
+
+  <!--Extern User-->
+  <div *ngIf="isExtern() && provider">
+
+    <!--Attributes-->
+    <div class="card mb-3 px-2">
+      <div class="card-header mx-n2">Attributes</div>
+      <div *ngFor="let attribute of user.attributes">
+        <div *ngIf="isArray(attribute.value) && attribute.key!=provider['mapping_key']">
+          <div class="card my-2">
+            <div class="card-header">
+              {{attribute.key}}
+            </div>
+            <div class="bg clearfix">
+              <div *ngFor="let item of attribute.value" class="card-element">
+                <span class="badge badge-primary display-4 my-2 me-2 float-left w-auto">
+                  <div class="my-2 mx-1">{{item}}</div>
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div *ngIf="!isArray(attribute.value) && attribute.key!=provider['mapping_key']">
+          <div class="input-group my-2">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="client_id">{{attribute.key}}</span>
+            </div>
+            <input type="text" class="form-control" placeholder="{{attribute.value}}" [disabled]="true"
+              name="redirect_uri" [(ngModel)]="user.attributes[getIndex(attribute)].value" title="{{attribute.key}}">
+          </div>
+        </div>
+      </div>
+
+      <!--Mapping Key Attribute-->
+      <div *ngIf="provider['mapping_key']">
+        <div *ngFor="let attribute of user.attributes">
+          <div *ngIf="attribute.key==provider['mapping_key']">
+            <div *ngIf="isArray(attribute.value)">
+              <div class="card my-2">
+                <div class="card-header">
+                  {{attribute.key}}
+                  <button class="btn btn-delete-complex-attribute float-right" type="button"
+                    (click)="deleteAttribute(attribute)"><span class="fa fa-trash"></span></button>
+                </div>
+                <div class="bg clearfix">
+                  <div *ngFor="let item of attribute.value" class="card-element">
+                    <span class="badge badge-primary display-4 my-2 me-2 float-left w-auto">
+                      {{item}} <button type="button" class="btn btn-secondary py-1"
+                        (click)="deleteValue(attribute, item)"><span class="fa fa-close"></span></button>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="input-group my-2 col-xl-4 col-sm-12">
+                  <input type="text" class="form-control" name="newAttributeValue" placeholder="new Value"
+                    [(ngModel)]="newAttributeValue [getIndex(attribute)]" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" (click)="addValue(attribute)"><span
+                        class="fa fa-plus"></span></button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div *ngIf="!isArray(attribute.value)">
+              <div class="input-group my-2">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="client_id">{{attribute.key}}</span>
+                </div>
+                <input type="text" class="form-control" placeholder="{{attribute.value}}" name="redirect_uri"
+                  [(ngModel)]="user.attributes[getIndex(attribute)].value">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" (click)="deleteAttribute(attribute)"><span
+                      class="fa fa-trash"></span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Add mapping-key claim-->
+        <div *ngIf="!hasMappingKeyClaim()">
+          <div class="input-group my-2 px-0 col-xl-4 col-sm-12">
+            <input type="text" class="form-control mapping-key" placeholder="{{provider['mapping_key']}}"
+              [disabled]="true" title="mapping_key">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" (click)="addMappingKeyClaim()"><span
+                  class="fa fa-plus"></span></button>
+            </div>
+          </div>
+          <ngb-alert [dismissible]="false" [type]="'info'">
+            Do you want your new Attribute {{provider['mapping_key']}} to have one or multiple values?
+            <div class="form-group" name="ValueNumber">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="ValueNumber" [(ngModel)]="simpleAttribute"
+                  id="oneValue" [value]="true" checked>
+                <label class="form-check-label" for="oneValue">
+                  One
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="ValueNumber" [(ngModel)]="simpleAttribute"
+                  id="multipleValues" [value]="false">
+                <label class="form-check-label" for="multipleValues">
+                  Multiple
+                </label>
+              </div>
+            </div>
+          </ngb-alert>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Save Button-->
+  <div class="clearfix mt-5">
+    <button type="submit" class="btn btn-primary btn-save-and-cancel float-left me-5"
+      (click)="saveChanges()">Save</button>
+    <a href="./user" class="btn btn-primary btn-save-and-cancel float-left">Cancel</a>
+  </div>
+  <br />
+</div>

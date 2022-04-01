@@ -1,0 +1,73 @@
+<!--Search Bar-->
+<div *ngIf = "!showNewProvider">
+    <form class="form-inline" style="display: table; margin: auto;">
+      <div class="search-wrapper">
+        <input class="form-control me-sm-2" type="search" [(ngModel)]="searchTerm" name="searchTerm"
+          placeholder="Search providers" style="border-radius: 2em;">
+      </div>
+      <button class="btn btn-primary my-2 my-sm-0"  (click)="showNewProvider = true">
+        <i class="fa fa-plus-square text-primary"></i>
+        Add Provider
+      </button>
+    </form>
+  </div>
+  
+  <!--New Provider-->
+  <div *ngIf = "showNewProvider">
+    <form class="form-inline" style="display: table; margin: auto;">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Please enter a name for the new Provider</span>
+        </div>
+        <input class="form-control" type="text" #newProviderName>
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="button" (click)="addProvider(newProviderName.value)">
+            <span class="fa fa-plus-square text-primary"></span> Add Provider
+          </button>
+          <button class="btn btn-primary" (click)="showNewProvider = false">
+            <span class="fa fa-close"></span> Back
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <br />
+
+  
+<!--Empty Search result-->
+<div *ngIf="(providers | search: searchTerm).length == 0" style="text-align: center;"
+class="alert alert-secondary alert-dismissible fade show" role="alert">No providers to show</div>
+
+<!--Providerlist-->
+<div class="card-columns" *ngIf="providers">
+    <div class="card card-list p-2" *ngFor="let provider of providers | search: searchTerm"
+        [routerLink]="['/provider', provider.name]">
+        <div class="card-avatar card-img-top">
+            <div class="card-avatar-character text-dark">
+                <span class="text-center mt-1" style="display: inline-block">
+                    <h4><i>{{provider.name}}</i></h4>
+                </span>
+
+                <button class="btn btn-primary float-right ml-2" *ngIf="provider.name!= confirmProvider"
+                    (click)="confirmDelete(provider); $event.stopPropagation()">
+                    <span class="fa fa-trash"></span>
+                </button>
+                <button class="btn btn-primary float-right" *ngIf="provider.name!= confirmProvider"
+                    [routerLink]="['/provider/', provider.name]">
+                    <span class="fa fa-edit"></span>
+                </button>
+            </div>
+        </div>
+
+        <!--Confirm Delete-->
+        <div class="alert alert-danger fade show" *ngIf="confirmProvider == provider.name">
+            Do you really want to delete this provider?<br />
+            <button class="btn btn-primary me-1" (click)="deleteProvider(provider); $event.stopPropagation()">
+                <span class="fa fa-trash"></span> Delete
+            </button>
+            <button class="btn btn-primary" (click)="hideConfirmDelete(); $event.stopPropagation()">
+                <span class="fa fa-close"></span> Cancel
+            </button>
+        </div>
+    </div>
+</div>

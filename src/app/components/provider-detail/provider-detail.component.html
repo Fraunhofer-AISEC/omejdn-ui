@@ -1,0 +1,202 @@
+<div *ngIf="provider">
+  <div class="input-group my-2 ">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Name</span>
+    </div>
+
+    <input class="form-control" id="name" [(ngModel)]="provider.name" placeholder="{{provider.name}}">
+  </div>
+
+  <div class="input-group my-2">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Redirect Uri</span>
+    </div>
+
+    <input class="form-control" id="redirect_uri" [(ngModel)]="provider.redirect_uri"
+      placeholder="{{provider.redirect_uri}}">
+  </div>
+
+  <div class="input-group my-2 ">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Client ID</span>
+    </div>
+
+    <input class="form-control" id="client_id" [(ngModel)]="provider.client_id" placeholder="{{provider.client_id}}">
+  </div>
+
+  <!--Client Secret-->
+  <div class="input-group my-2">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Client Secret</span>
+    </div>
+
+    <input class="form-control" id="client_secret" [(ngModel)]="provider.client_secret"
+      placeholder="{{provider.client_secret}}">
+  </div>
+
+  <!--Scopes-->
+  <div class="card my-2">
+    <div class="card-header"> Scopes </div>
+    <div class="bg clearfix">
+      <div *ngFor="let scope of provider.scopes" class="card-element">
+        <span class="badge badge-primary display-4 my-2 me-2 float-left w-auto">
+          {{scope}} <button type="button" class="btn btn-secondary py-1" (click)="deleteScope(scope)"><span
+              class="fa fa-close"></span></button>
+        </span>
+      </div>
+    </div>
+
+    <div class="input-group my-2 col-xl-4 col-sm-12">
+      <input type="text" class="form-control" name="newScope" placeholder="new Scope" [(ngModel)]="newScope"
+        aria-describedby="basic-addon2">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" (click)="addScope()"><span
+            class="fa fa-plus"></span></button>
+      </div>
+    </div>
+
+  </div>
+
+  <!--Claim Mapper-->
+  <div class="input-group my-2">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Claim Mapper</span>
+    </div>
+
+    <input class="form-control" id="claim_mapper" [(ngModel)]="provider.claim_mapper"
+      placeholder="{{provider.claim_mapper}}">
+  </div>
+
+  <!--authorization_endpoint-->
+  <div class="input-group my-2">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Authorization Endpoint</span>
+    </div>
+
+    <input class="form-control" id="authorization_endpoint" [(ngModel)]="provider.authorization_endpoint"
+      placeholder="{{provider.authorization_endpoint}}">
+  </div>
+
+  <!--Token Endpoint-->
+  <div class="input-group my-2">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Token Endpoint</span>
+    </div>
+
+    <input class="form-control" id="token_endpoint" [(ngModel)]="provider.token_endpoint"
+      placeholder="{{provider.token_endpoint}}">
+  </div>
+
+  <!--Userinfo Endpoint-->
+  <div class="input-group my-2">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Userinfo Endpoint</span>
+    </div>
+
+    <input class="form-control" id="userinfo_endpoint" [(ngModel)]="provider.userinfo_endpoint"
+      placeholder="{{provider.userinfo_endpoint}}">
+  </div>
+
+  <!--Response Type-->
+  <div class="input-group my-2">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Response Type</span>
+    </div>
+
+    <input class="form-control" id="response_type" [(ngModel)]="provider.response_type"
+      placeholder="{{provider.response_type}}">
+  </div>
+
+  <!--Logo-->
+  <div class="input-group my-2">
+    <div class="input-group-prepend">
+      <span class="input-group-text">logo</span>
+    </div>
+
+    <input class="form-control" id="logo" [(ngModel)]="provider.logo"
+      placeholder="{{provider.logo}}">
+  </div>
+
+  <!--External_Userid-->
+  <div class="input-group my-2">
+    <div class="input-group-prepend">
+      <span class="input-group-text">External Userid</span>
+    </div>
+
+    <input class="form-control" id="external_userid" [(ngModel)]="provider.external_userid"
+      placeholder="{{provider.external_userid}}">
+  </div>
+
+  <!--Claim Mapping-->
+  <div class="card mb-3">
+    <div class="card-header">Claim Mapping</div>
+  <!--Mapping Key-->
+  <div class="card-element input-group my-2">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Mapping Key</span>
+    </div>
+
+    <input class="form-control" id="mapping_key" [(ngModel)]="provider.mapping_key"
+      placeholder="{{provider.mapping_key}}">
+  </div>
+
+  <!--Mapping Pairs-->
+  <div class="card">
+    <div class="card-header">Mapping Pairs</div>
+    <div *ngFor="let pair of provider.mapping_pairs" class="card-element">
+        <div *ngIf="pair.attribute.value == 'true' && !valueEdited(pair)" class="input-group my-2 mx-0">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="pair_key">{{pair.key}}</span>
+          </div>
+          <input type="text" class="form-control" placeholder="{{pair.attribute.key}}" name="pair_value"
+            [(ngModel)]="provider.mapping_pairs[getIndex(pair)].attribute.key">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" (click)="addMappingPairValue(pair)">add Value</button>
+            <button class="btn btn-outline-secondary" type="button" (click)="deleteMappingPair(pair)"><span
+                class="fa fa-trash"></span></button> 
+          </div>
+        </div>
+        <div *ngIf="pair.attribute.value != 'true' || valueEdited(pair)" class="card my-2">
+          <div class="card-header">
+            {{pair.key}}
+            <button class="btn btn-delete-complex-attribute float-right" type="button"
+            (click)="deleteMappingPair(pair)"><span class="fa fa-trash"></span></button>
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="mapped_scope">Mapped Scope</span>
+            </div>
+            <input type="text" class="form-control" placeholder="{{pair.attribute.key}}" name="pair_value"
+          [(ngModel)]="provider.mapping_pairs[getIndex(pair)].attribute.key">
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="pair_value">Value</span>
+            </div>
+            <input type="text" class="form-control" placeholder="{{pair.attribute.value}}" name="pair_value"
+          [(ngModel)]="provider.mapping_pairs[getIndex(pair)].attribute.value">
+          </div>
+          
+        </div>
+    </div>
+
+    <!--New Pair-->
+    <div class="input-group my-2 col-xl-4 col-sm-12">
+      <input type="text" class="form-control" placeholder="Key" [(ngModel)]="newPairKey">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" (click)="addMappingPair()"><span
+            class="fa fa-plus"></span></button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!--Save and Cancel Button-->
+  <div class="clearfix mt-5">
+    <button type="submit" (click)="saveChanges()"
+      class="btn btn-primary btn-save-and-cancel float-left me-5">Save</button>
+    <a href="./provider" class="btn btn-primary btn-save-and-cancel float-left">Cancel</a>
+  </div>
+  <br />
+
+</div>
